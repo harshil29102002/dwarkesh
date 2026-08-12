@@ -32,7 +32,6 @@ const stockData = [
 const Container = styled.div`
 padding: 1rem;
 margin-top: 1rem;
-// background-color: #F7F8FA;
 display: flex;
 gap: 1rem;
 align-items: center;
@@ -54,13 +53,13 @@ justify-content: space-between;
 align-items: center;
 box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 0px;
 min-width:248px;
-border-radius: 1rem;
+border-radius: 18px;
 transition: all 0.1s ease-in-out;
 &:hover{
-    border-color: #2F6FED;
+    border-color: #B30000;
     translateX: -5px;
     transform: translateY(-2px);
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(182, 207, 250, 1) 0px 2px 4px -1px;
+   box-shadow: 0 4px 12px rgba(204, 0, 0, 0.18);
 }
 
 @media (max-width: 768px) {
@@ -82,8 +81,8 @@ font-weight: 500;
 
 const Icons = styled.div`
 font-size: 1.5rem;
-color: #2F6FED;
-background-color: #EFF5FF;
+color: #CC0000;
+background-color: #FDE8E8;
 display: flex;
 align-items: center;
 justify-content: center;

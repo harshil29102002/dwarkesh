@@ -154,10 +154,10 @@ const CancelButton = styled.button`
 `;
 
 const SubmitButton = styled.button`
-  background-color: #2f6fed;
+  background-color: #cc0000;
   padding: 0.7rem 1.4rem;
   border-radius: 0.5rem;
-  border: 1px solid #2f6fed;
+  border: 1px solid #e2e4e9;
   font-family: "gilroy-Medium", sans-serif;
   font-size: 0.9rem;
   color: #fff;
@@ -165,7 +165,8 @@ const SubmitButton = styled.button`
   transition: all 0.2s ease-in-out;
 
   &:hover {
-    background-color: #1d5fe0;
+    background-color: #B30000;
+    border-color: #B30000;
   }
 
   &:disabled {
@@ -174,16 +175,52 @@ const SubmitButton = styled.button`
   }
 `;
 
+interface VehicleFormData {
+  make: string;
+  model: string;
+  color: string;
+  status: string;
+  godown: string;
+  mfgDate: string;
+  chassis: string;
+  engineNo: string;
+  amount: string;
+}
+
+type RowStatus = "in-stock" | "reserved" | "sold";
+
+export interface Row {
+  id: number;
+  model: string;
+  godown: string;
+  mfgDate: string;
+  chassis: string;
+  colour: string;
+  engineNo: string;
+  amount: number;
+  status: RowStatus;
+}
+
+
+ 
+interface EditVehicleProps {
+  // The row clicked on via "Edit Details". Null when there's nothing
+  // selected yet (e.g. modal mounted before a row is chosen).
+  vehicle: Row | null;
+  onSubmit: (vehicle: Row) => void;
+  onClose: () => void;
+}
+
 // Table rows store a combined "model" string ("Honda Activa 6G") and use
 // "colour" (British spelling) — the form works with separate make/model and
 // "color". This maps one shape to the other. If make/model are ever stored
 // separately upstream, this can be simplified/removed.
-const splitModel = (modelStr = "") => {
+const splitModel = (modelStr: string = "") => {
   const [make, ...rest] = modelStr.trim().split(" ");
   return { make: make || "", model: rest.join(" ") || "" };
 };
 
-const rowToFormData = (row) => {
+const rowToFormData = (row: Row | null | undefined): VehicleFormData => {
   if (!row) {
     return {
       make: "",
@@ -214,20 +251,20 @@ const rowToFormData = (row) => {
 // vehicle = the row object clicked on ("Edit Details" from the action menu)
 // onSubmit(updatedVehicle) = called with the merged, edited record
 // onClose() = called to dismiss the modal (Cancel, X, backdrop click, or after submit)
-const EditVehicle = ({ vehicle, onSubmit, onClose }) => {
-  const [formData, setFormData] = useState(() => rowToFormData(vehicle));
+const EditVehicle = ({ vehicle, onSubmit, onClose }: EditVehicleProps) => {
+  const [formData, setFormData] = useState<VehicleFormData>(() => rowToFormData(vehicle));
 
   // Resync if a different row is passed in while the modal stays mounted.
   useEffect(() => {
     setFormData(rowToFormData(vehicle));
   }, [vehicle]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (formData.chassis.length !== 17) {
       alert("Chassis number should be 17 characters");
@@ -235,12 +272,12 @@ const EditVehicle = ({ vehicle, onSubmit, onClose }) => {
     }
 
     onSubmit({
-      ...vehicle, // keep id and any other fields the form doesn't touch
+      ...(vehicle ?? {}), // keep id and any other fields the form doesn't touch
       ...formData,
       model: `${formData.make} ${formData.model}`.trim(),
       colour: formData.color,
       amount: Number(formData.amount) || 0,
-    });
+    } as Row);
     onClose();
   };
 

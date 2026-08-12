@@ -1,20 +1,14 @@
-// import { BiUser } from "react-icons/bi";
 import { LuLogOut } from "react-icons/lu";
-// import { MdAdminPanelSettings } from "react-icons/md";
-import { RiBox3Line } from "react-icons/ri";
 import styled from "styled-components";
-import { CgNotes } from "react-icons/cg";
-import { RiEBikeLine } from "react-icons/ri";
-import { IoAnalytics } from "react-icons/io5";
-import { FiUsers } from "react-icons/fi";
-import WarehouseIcon from '@iconify-react/lucide/warehouse';
-// import { useState } from "react";
+import LogoImg  from "../../assets/honda.png"
+
 
 const Header = styled.div`
   display: flex;
   padding: 1rem 1rem;
   margin: 0rem;
-  background-color: #F7F8FA;
+  background-color: #CC0000;
+  color: #fff;
   align-items: center;
   justify-content: space-between;
   font-family: 'gilroy-Medium', sans-serif;
@@ -70,7 +64,7 @@ const AdminAvatar = styled.div`
 const Title = styled.div`
   font-weight: bold;
   font-size: 0.8rem;
-  color:#14161A;
+  color:#fff;
   line-height: 0.7rem;
   letter-spacing: 0.01em;
 `;
@@ -78,7 +72,7 @@ const Title = styled.div`
 const Role = styled.div`
  font-family: 'gilroy-Medium', sans-serif;
   font-size: 0.7rem;
-  color: #9AA0AC;
+  color: #fff;
   line-height: 1rem;
   letter-spacing: 0.01em;
 `;
@@ -104,9 +98,10 @@ gap: 0.4rem;
 font-weight: bold;
 font-size: 1.5rem;
 
-svg{
-width: 2rem;
-height: 2rem;
+img{
+width: 2.5rem;
+height: 2.5rem;
+border-radius: 10%;
 }
 `;
 
@@ -119,7 +114,7 @@ const AdminSection = styled.div`
 const Avatar = styled.div`
   width: 2rem;
   height: 2rem;
-  background-color: #9AA0AC;
+  background-color: #fff;
   border-radius: 50%;
 
 `;
@@ -129,61 +124,7 @@ const TextSection = styled.div`
   flex-direction: column;
 `;
 
-const MainNavbar = styled.div`
-  background-color: #F7F8FA;
-  padding: 1rem;
-  border:1px solid #E2E4E9;
- 
-  
-  font-family: 'gilroy-Medium', sans-serif;
-  ul{
-    display: flex;
-    gap: 1rem;
-    border-radius: 0.5rem;
-    align-items: center;
-    justify-content: center;
-    background-color: #F7F8FA;
-    padding: 1rem;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-   
-    @media screen and (max-width: 768px) {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    
-  }
 
-    li{
-      padding: 0.6rem 1rem;
-      display: flex;
-
-      gap: 0.5rem;
-      align-items: center;
-      background-color: #FFF;
-      border-radius: 0.5rem;
-      cursor: pointer;
-       border: 1px solid #E2E4E9;
-       border-radius: 2rem;
-      font-size: 0.8rem;
-      color: #14161A;
-      line-height: 1rem;
-      letter-spacing: 0.01em;
-      font-weight: 500;
-
-      transition: all 0.2s ease-in;
-       &:hover{
-        background-color: #2F6FED;
-        color: white;
-       }
-
-       @media screen and (max-width: 768px) {
-        text-align: center;
-        font-size: 0.7rem;
-      }
-    }
-  }
-`;
 
 const SideBar = () => {
   // const [role, setRole] = useState("admin"); 
@@ -191,7 +132,7 @@ const SideBar = () => {
   return (
     <div>
       <Header>
-        <Logo><RiEBikeLine/> DWARKESH</Logo>
+        <Logo><img src={LogoImg}/> DWARKESH</Logo>
         <AdminSection>
           {/* <Admintoggle>
             <Indicator $active={role} />
@@ -218,15 +159,6 @@ const SideBar = () => {
           </LogOut>
         </AdminSection>
       </Header>
-      <MainNavbar>
-        <ul>
-          <li><RiBox3Line/> Stock Register</li>
-          <li><CgNotes/>Delivery challans</li>
-          <li><IoAnalytics/>Enterprise Analytics</li>
-          <li><WarehouseIcon height="13px"/>Godown Management</li>
-          <li><FiUsers/>Staff Management</li>
-        </ul>
-      </MainNavbar>
     </div>
   );
 };

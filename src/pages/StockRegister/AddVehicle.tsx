@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { RxCross2 } from "react-icons/rx"
 import styled from "styled-components"
+import type { Row } from "./type";
 
 const Overlay = styled.div`
 background-color: rgba(0, 0, 0, 0.5);
@@ -103,15 +104,15 @@ color: #14161A;
 
 &:focus{
     outline: none;
-    border-color:#2F6FED;
+    border-color:#CC0000;
 }
 `;
 
-const HelperText = styled.p`
-font-size: 0.8rem;
-font-family: 'gilroy-Medium', sans-serif;
-color: #6B7280;
-`;
+// const HelperText = styled.p`
+// font-size: 0.8rem;
+// font-family: 'gilroy-Medium', sans-serif;
+// color: #6B7280;
+// `;
 
 const Select = styled.select`
 padding: 0.5rem 1rem;
@@ -123,12 +124,12 @@ background-color: #fff;
 
 &:focus{
     outline: none;
-    border-color:#2F6FED;
+    border-color:#CC0000;
 }
 `;
 
 const Option = styled.option`
-border: 1px solid #E2E4E9;
+border: 1px solid #CC0000;
 `;
 
 const Footer = styled.div`
@@ -137,7 +138,7 @@ align-items: center;
 justify-content: flex-end;
 padding: 1rem 0rem;
 gap: 0.4rem;
-border-top: 1px solid #E2E4E9;
+border-top: 1px solid #e2e4e9;
 `;
 
 const CancelButton = styled.button`
@@ -164,12 +165,36 @@ font-size: 0.9rem;
 color: #14161A;
 transition: all 0.3s ease-in-out;
 &:hover{
-    background-color: #2F6FED;
+    background-color: #CC0000;
+    border-color: #CC0000;
     color: #fff;
 }
 `;
 
-const InitialFormData = {
+
+
+interface VehicleFormData {
+    make: string;
+    model: string;
+    color: string;
+    status: string;
+    godown: string;
+    mfgDate: string;
+    chassis: string;
+    engineNo: string;
+    amount: string;
+}
+
+
+
+export type NewVehicle = Omit<Row, "id">;
+ 
+interface AddVehicleProps {
+  onSubmit: (vehicle: NewVehicle) => void;
+  onClose: () => void;
+}
+
+const InitialFormData : VehicleFormData = {
     make: "",
     model: "",
     color: "",
@@ -183,25 +208,38 @@ const InitialFormData = {
 
 
 
-const AddVehicle = ({onSubmit, onClose}) => {
+const AddVehicle = ({onSubmit, onClose}: AddVehicleProps) => {
 
-    const [formData, setFormData] = useState(InitialFormData);
+    const [formData, setFormData] = useState<VehicleFormData>(InitialFormData);
 
-    const handleChange = (e) => {
-        const {name, value} = e.target.value;
-        setFormData({...formData, [name]: value});
-    }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if(formData.chassis.length !== 17){
-            alert('Chassis number should be 17 characters');
-            return
-        }
-        onSubmit(formData);
-        console.log(formData);
-        onClose();
-    }
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      // was e.target.value — that's a string, not {name, value}. Fixed.
+      const { name, value } = e.target;
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (formData.chassis.length !== 17) {
+        alert("Chassis number should be 17 characters");
+        return;
+      }
+   
+      // Transform to match StockRow's shape (merged model, "colour"),
+      // same mapping EditVehicle.tsx applies on save.
+      onSubmit({
+        model: `${formData.make} ${formData.model}`.trim(),
+        colour: formData.color,
+        status: formData.status as Row["status"],
+        godown: formData.godown,
+        mfgDate: formData.mfgDate,
+        chassis: formData.chassis,
+        engineNo: formData.engineNo,
+        amount: Number(formData.amount) || 0,
+      });
+      onClose();
+    };
 
 
   return (
@@ -216,17 +254,17 @@ const AddVehicle = ({onSubmit, onClose}) => {
           <Row>
             <Field>
                 <Label>Make</Label>
-                <Input type="text" placeholder="Honda" value={formData.make} onChange={handleChange} />
+                <Input type="text" name="make" placeholder="Honda" value={formData.make} onChange={handleChange} />
             </Field>
             <Field>
                 <Label>Model</Label>
-                <Input type="text" placeholder="Activa 6G" value={formData.model} onChange={handleChange}/>
+                <Input type="text" name="model" placeholder="Activa 6G" value={formData.model} onChange={handleChange}/>
             </Field>
           </Row>
           <Row>
             <Field>
                 <Label>Color</Label>
-                <Input type="text" placeholder="Black" value={formData.color} onChange={handleChange}/>
+                <Input type="text" name="color" placeholder="Black" value={formData.color} onChange={handleChange}/>
             </Field>
             <Field>
                 <Label>Status</Label>

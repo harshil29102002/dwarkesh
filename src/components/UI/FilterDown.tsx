@@ -17,6 +17,11 @@ const StyledSelect = styled.select`
   font-size: 14px;
   cursor: pointer;
   font-family: 'gilroy-Medium', sans-serif;
+ 
+  &:focus{
+    outline: none;
+    border-color:#F5B8B8;
+}
 `;
 
 const Arrow = styled(IoIosArrowDown)`
@@ -39,7 +44,7 @@ export function FilterDropdown({ label, options, value, onChange }: FilterDropdo
   return (
     <Wrapper>
       <StyledSelect value={value} onChange={(e) => onChange(e.target.value)}>
-        <option value="" disabled>{label}</option>
+        <option value="">{label}</option>
         {options.map((opt) => (
           <option key={opt} value={opt}>{opt}</option>
         ))}
